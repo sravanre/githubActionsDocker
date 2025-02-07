@@ -1,6 +1,6 @@
 FROM nginx:latest
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+#COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Create a custom index.html file
 COPY index.html /usr/share/nginx/html/index.html
