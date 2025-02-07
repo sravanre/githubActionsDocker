@@ -15,14 +15,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag nginx-web1:latest
+      run: docker build . --file Dockerfile --tag nginx-web1:${{ steps.generate_build_number.outputs.build_number }}
     - name: Login to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
     - name: listing the Docker image
       run: docker images -a
     - name: tagging the docker image name with respect to docker hub username
-      run: docker tag nginx-web1:latest "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:latest
+      run: docker tag nginx-web1:${{ steps.generate_build_number.outputs.build_number }} "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:${{ steps.generate_build_number.outputs.build_number }}
     - name: Docker image name after tagging
       run: docker images -a
     - name: Push the Docker image
-      run: docker push "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:latest
+      run: docker push "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:${{ steps.generate_build_number.outputs.build_number }}
