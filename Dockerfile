@@ -1,12 +1,12 @@
 FROM nginx:latest
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html/
 RUN mkdir images
-COPY images/* /usr/share/nginx/html/images
+COPY images/* images
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Create a custom index.html file
-COPY index.html /usr/share/nginx/html/index.html
+COPY index.html index.html
 
 EXPOSE 8080
 
