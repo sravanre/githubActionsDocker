@@ -18,7 +18,11 @@ jobs:
       run: docker build . --file Dockerfile --tag nginx-web1:latest
     - name: Login to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-    - name: Push the Docker image
+    - name: listing the Docker image
+      run: docker images -a
+    - name: tagging the docker image name with respect to docker hub username
+      run: docker tag nginx-web1:latest "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:latest
+    - name: Docker image name after tagging
       run: docker images -a
     - name: Push the Docker image
       run: docker push "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:latest
