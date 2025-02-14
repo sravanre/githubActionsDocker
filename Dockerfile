@@ -1,4 +1,5 @@
-FROM nginx:latest
+FROM nginx:alpine 
+# checking if the size reduces
 
 WORKDIR /usr/share/nginx/html/
 RUN mkdir images
