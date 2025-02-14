@@ -26,11 +26,20 @@ jobs:
     - name: delete the older docker image 
       run: sudo docker rmi -f nginx-web1:v1
 
-  test-dcoker-image:
+  test-docker-image:
     runs-on: self-hosted
     needs: build-docker-image
     steps:
+    - name: stop any older docker container
+      run: for i in `sudo docker ps -a | grep nginx | awk '{print $1}'`; do sudo docker stop $i; done
     - name: run the Docker image
-      run: sudo docker run -p 8080:8080 "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
+      run: sudo docker run -d -p 8080:8080 "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
+    
+  ping-the-url:
+    runs-on: self-hosted
+    needs: test-docker-image
+    steps:
+    - name: ping the url
+      run: curl -i http://localhost:8080 | grep "HTTP/1.1 200 OK" > /dev/null 2>&1
 
   
