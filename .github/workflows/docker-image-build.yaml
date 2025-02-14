@@ -1,13 +1,12 @@
-name: Docker Image CI
+name: Docker Image build and test in local
 
 on:
-  pull_request:
-    branches: [ "main" ]
+  push:
+    branches:
+      - '**'
 
 jobs:
-
-  build:
-    # runs-on: ubuntu-latest
+  build-docker-image:
     runs-on: self-hosted
 
     steps:
@@ -24,16 +23,14 @@ jobs:
       run: sudo docker tag nginx-web1:v1 "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
     - name: Docker image name after tagging
       run: sudo docker images -a
+    - name: delete the older docker image 
+      run: sudo docker rmi -f nginx-web1:v1
 
-  test:
+  test-dcoker-image:
     runs-on: self-hosted
+    needs: build-docker-image
     steps:
-    - name: Pull the Docker image
-      run: sudo docker pull "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
+    - name: run the Docker image
+      run: docker run -p 8080:8080 "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
 
-
-  push:
-    runs-on: self-hosted
-    steps:
-    - name: Push the Docker image
-      run: sudo docker push "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
+  
