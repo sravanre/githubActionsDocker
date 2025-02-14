@@ -31,6 +31,6 @@ jobs:
     needs: build-docker-image
     steps:
     - name: run the Docker image
-      run: docker run -p 8080:8080 "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
+      run: sudo docker run -p 8080:8080 "${{ secrets.DOCKER_HUB_USERNAME }}"/nginx-web1:v1
 
   
